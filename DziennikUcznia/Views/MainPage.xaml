@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DziennikUcznia.Views.MainPage"
+             Title="System losowania osoby" 
+             StyleClass="page">
+
+
+    <VerticalStackLayout Spacing="10" Padding="10">
+
+        <HorizontalStackLayout Spacing="5">
+            <Picker x:Name="ClassPicker"
+                    Title="Wybierz klasę"
+                    SelectedIndexChanged="OnClassChanged"
+                    WidthRequest="200"/>
+            <Entry x:Name="NewClassEntry"
+                   Placeholder="Nowa klasa"
+                   WidthRequest="100"/>
+            <Button Text="Dodaj klasę"
+                    Clicked="OnAddClass"/>
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="StudentsList" 
+                        HeightRequest="200" 
+                        SelectionMode="None">
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="5" Margin="2" BackgroundColor="#d1d1de">
+                        <HorizontalStackLayout Spacing="10">
+                            
+                            <Label Text="{Binding}" VerticalOptions="Center"/>
+                            <CheckBox IsChecked="{Binding IsPresent}" VerticalOptions="Center"/>
+                            
+                        </HorizontalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <Entry x:Name="StudentEntry" 
+               StyleClass="studentsList" 
+               Placeholder="Imie i nazwisko ucznia"/>
+        
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Dodaj" Clicked="OnAddStudent" StyleClass="mainButton"/>
+            <Button Text="Usuń zaznaczonego" Clicked="OnRemoveStudent"/>
+            <Button Text="Zapisz" Clicked="OnSave"/>
+        </HorizontalStackLayout>
+        
+        <Button Text="Losuj osobę" Clicked="OnDrawStudent" StyleClass="drawButton"/>
+        <Label x:Name="DrawnStudentLabel" 
+               StyleId="titleLabel" 
+               HorizontalOptions="Center"/>
+
+        <Button Text="Losuj szczęśliwy numerek"
+                Clicked="OnDrawLuckyNumber"/>
+        <Label x:Name="LuckyNumberLabel"
+               FontSize="22"
+               HorizontalOptions="Center"
+               TextColor="Red"/>
+
+        <AbsoluteLayout x:Name="AnimationArea" HeightRequest="200" BackgroundColor="DarkSeaGreen">
+
+            <!-- samochód -->
+            <Grid x:Name="CarContainer"
+          WidthRequest="180" HeightRequest="60"
+          AbsoluteLayout.LayoutBounds="-200,100,180,60"
+          AbsoluteLayout.LayoutFlags="None">
+
+                <!-- samobus -->
+                <BoxView x:Name="CarBody" Color="Yellow" 
+                 HeightRequest="40" WidthRequest="180"
+                 CornerRadius="5"
+                 VerticalOptions="End"/>
+
+                <!-- numerek -->
+                <Label x:Name="CarNumberLabel"
+               Text=""
+               FontSize="28"
+               TextColor="Yellow"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="False"/>
+            </Grid>
+
+            <!-- koło 1 -->
+            <Ellipse x:Name="WheelLeft" Fill="Black"
+             WidthRequest="25" HeightRequest="25"
+             AbsoluteLayout.LayoutBounds="-190,140,25,25"
+             AbsoluteLayout.LayoutFlags="None"/>
+            <!-- koło 2 -->
+            <Ellipse x:Name="WheelRight" Fill="Black"
+             WidthRequest="25" HeightRequest="25"
+             AbsoluteLayout.LayoutBounds="-70,140,25,25"
+             AbsoluteLayout.LayoutFlags="None"/>
+        </AbsoluteLayout>
+
+    </VerticalStackLayout>
+</ContentPage>
