@@ -9,6 +9,8 @@ public partial class MainPage : ContentPage
     private List<Student> students = new List<Student>();
     private FileService fileService = new FileService();
     private Dictionary<string, List<Student>> allClasses;
+    private int? currentLuckyNumber = null;
+
 
     public MainPage()
     {
@@ -28,6 +30,7 @@ public partial class MainPage : ContentPage
         {
             students = allClasses[selectedClass];
             StudentsList.ItemsSource = students;
+            UpdateLuckyHighlight();
         }
     }
 
@@ -67,19 +70,24 @@ public partial class MainPage : ContentPage
 
     private void OnDrawStudent(object sender, EventArgs e)
     {
-        var presentStudents = students.Where(s => s.IsPresent).ToList();
+        var availableStudents = students
+            .Where(s => s.IsPresent &&
+                   (!currentLuckyNumber.HasValue || s.Number != currentLuckyNumber.Value))
+            .ToList();
 
-        if (presentStudents.Count > 0)
+        if (availableStudents.Count > 0)
         {
             Random random = new Random();
-            int index = random.Next(presentStudents.Count);
-            var drawnStudent = presentStudents[index];
+            var drawnStudent = availableStudents[random.Next(availableStudents.Count)];
 
-            DrawnStudentLabel.Text = $"Wylosowany: {drawnStudent.FullName} (#{drawnStudent.Number})";
+            DrawnStudentLabel.Text =
+                $"Wylosowany: {drawnStudent.FullName} (#{drawnStudent.Number})";
         }
         else
         {
-            DisplayAlert("Brak obecnych", "Nie ma żadnego obecnego ucznia do wylosowania", "OK");
+            DisplayAlert("Brak dostępnych",
+                "Nie można wylosować – szczęśliwy numerek jest wykluczony.",
+                "OK");
         }
     }
 
@@ -93,13 +101,14 @@ public partial class MainPage : ContentPage
     }
 
 
-    private void OnRemoveStudent(object sender, EventArgs e)
+    private void OnDeleteStudent(object sender, EventArgs e)
     {
-        var selectedStudent = StudentsList.SelectedItem as Student;
+        var button = sender as Button;
+        var student = button?.CommandParameter as Student;
 
-        if (selectedStudent != null)
+        if (student != null)
         {
-            students.Remove(selectedStudent);
+            students.Remove(student);
 
             StudentsList.ItemsSource = null;
             StudentsList.ItemsSource = students;
@@ -127,20 +136,37 @@ public partial class MainPage : ContentPage
 
     private async void OnDrawLuckyNumber(object sender, EventArgs e)
     {
-        int maxCount = allClasses.Values.Any() ? allClasses.Values.Max(c => c.Count) : 1;
+        if (!allClasses.Any())
+        {
+            await DisplayAlert("Brak klas", "Nie ma żadnej klasy.", "OK");
+            return;
+        }
+
+        var allStudents = allClasses.Values.SelectMany(c => c).ToList();
+
+        if (allStudents.Count == 0)
+        {
+            await DisplayAlert("Brak uczniów", "Nie ma uczniów.", "OK");
+            return;
+        }
+
+        int maxNumber = allStudents.Max(s => s.Number);
+
         Random rnd = new Random();
-        int luckyNumber = rnd.Next(1, maxCount + 1);
+        currentLuckyNumber = rnd.Next(1, maxNumber + 1);
 
-        LuckyNumberLabel.Text = $"Szczęśliwy numerek: {luckyNumber}";
+        LuckyNumberLabel.Text = $"Szczęśliwy numerek: {currentLuckyNumber}";
+        LuckyNumberLabel.TextColor = Colors.Green;
 
-        foreach (var s in students)
-            s.IsLucky = (s.Number == luckyNumber);
-
-        StudentsList.ItemsSource = null;
-        StudentsList.ItemsSource = students;
+        UpdateLuckyHighlight();
 
         var animation = new CarAnimation(CarBody, WheelLeft, WheelRight, CarNumberLabel);
-        await animation.PlayAsync(luckyNumber);
+        await animation.PlayAsync(currentLuckyNumber.Value);
+    }
 
+    private void UpdateLuckyHighlight()
+    {
+        foreach (var s in students)
+            s.IsLucky = (currentLuckyNumber.HasValue && s.Number == currentLuckyNumber.Value);
     }
 }

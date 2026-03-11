@@ -72,6 +72,13 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Styles\" />
+	  <Folder Include="Resources\Styles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiCss Update="Resources\Style.css">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </MauiCss>
 	</ItemGroup>
 
 </Project>

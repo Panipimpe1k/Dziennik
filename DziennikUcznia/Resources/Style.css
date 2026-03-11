@@ -1,0 +1,49 @@
+.page {
+    background-color: #9392a8;
+}
+
+.classPicker {
+    background-color: #5e5c7a;
+    color: #38383b;
+    border-radius: 10;
+}
+
+.studentsList {
+    background-color: #dadae0;
+    border-radius: 10;
+}
+
+.mainButton {
+    background-color: #575475;
+    color: white;
+    border-radius: 8;
+}
+
+.drawButton {
+    background-color: #151326;
+    color: white;
+    font-size: 18;
+}
+
+.studentEntry {
+    background-color: white;
+    color: #151326;
+    border-radius: 8;
+}
+
+#titleLabel {
+    font-size: 24;
+    color: white;
+    background-color: #4A148C;
+}
+
+#StudentName {
+    background-color: #d1d1de;
+    border-radius: 0;
+}
+
+button {
+    background-color: #5e5c7a;
+    color: white;
+    font-size: 18;
+}

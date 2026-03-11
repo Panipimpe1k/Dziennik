@@ -41,6 +41,7 @@ namespace DziennikUcznia.Animations
 
             // Pauza niby na środku
             await Task.Delay(500);
+            numberLabel.IsVisible = true;
 
             // Pojawienie się numerka który tego nie robi
             numberLabel.Text = luckyNumber.ToString();
@@ -60,7 +61,7 @@ namespace DziennikUcznia.Animations
                 wheelRight.TranslateTo(endX, 0, 1200, Easing.CubicInOut)
             );
 
-            // Ukrywamy samobus
+            // Ukrywamy numerek juz ukryty
             numberLabel.IsVisible = false;
 
             // Reset drugi

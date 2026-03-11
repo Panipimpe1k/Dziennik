@@ -4,7 +4,10 @@
              x:Class="DziennikUcznia.Views.MainPage"
              Title="System losowania osoby" 
              StyleClass="page">
-
+    <ContentPage.Resources>
+        <StyleSheet Source="\DziennikUcznia\Resources\Style.css" />
+    </ContentPage.Resources>
+    
 
     <VerticalStackLayout Spacing="10" Padding="10">
 
@@ -29,9 +32,20 @@
                     <Frame Padding="5" Margin="2" BackgroundColor="#d1d1de">
                         <HorizontalStackLayout Spacing="10">
                             
-                            <Label Text="{Binding}" VerticalOptions="Center"/>
-                            <CheckBox IsChecked="{Binding IsPresent}" VerticalOptions="Center"/>
+                            <Label Text="{Binding}" 
+                                   VerticalOptions="Center"
+                                   WidthRequest="180"/>
                             
+                            <CheckBox IsChecked="{Binding IsPresent}" 
+                                      VerticalOptions="Center"/>
+                            
+                            <Button Text="Usuń"
+                                    Clicked="OnDeleteStudent"
+                                    CommandParameter="{Binding}"
+                                    BackgroundColor="DarkRed"
+                                    TextColor="White"
+                                    HeightRequest="35"/>
+
                         </HorizontalStackLayout>
                     </Frame>
                 </DataTemplate>
@@ -45,7 +59,6 @@
         
         <HorizontalStackLayout Spacing="10">
             <Button Text="Dodaj" Clicked="OnAddStudent" StyleClass="mainButton"/>
-            <Button Text="Usuń zaznaczonego" Clicked="OnRemoveStudent"/>
             <Button Text="Zapisz" Clicked="OnSave"/>
         </HorizontalStackLayout>
         
@@ -59,7 +72,7 @@
         <Label x:Name="LuckyNumberLabel"
                FontSize="22"
                HorizontalOptions="Center"
-               TextColor="Red"/>
+               TextColor="Green"/>  
 
         <AbsoluteLayout x:Name="AnimationArea" HeightRequest="200" BackgroundColor="DarkSeaGreen">
 
